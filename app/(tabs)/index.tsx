@@ -1,15 +1,17 @@
 import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import Hero from '@/components/Hero'
 import Topbar from '@/components/Topbar'
 import PdfCard from '@/components/PdfCard'
 import FilterBar from '@/components/FilterBar'
+import More from '@/components/More'
 
 const pdfs = [
   {
     id: '1',
-    name: 'React Notes.pdf',
+    name: 'React Notes of the week with additional information.pdf',
     size: '2.4 MB',
     date: '28/5/26',
     time: '10:30 AM',
@@ -52,6 +54,24 @@ const pdfs = [
     image: 'https://picsum.photos/200/304',
     sizeBytes: 1.9,
   },
+  {
+    id: '6',
+    name: 'HTML5 Guide.pdf',
+    size: '2.1 MB',
+    date: '23/5/26',
+    time: '10:00 AM',
+    image: 'https://picsum.photos/200/308',
+    sizeBytes: 2.1,
+  },
+  {
+    id: '7',
+    name: 'Web Accessibility.pdf',
+    size: '3.5 MB',
+    date: '22/5/26',
+    time: '1:30 PM',
+    image: 'https://picsum.photos/200/306',
+    sizeBytes: 3.5,
+  }
 ]
 
 const getSortedPdfs = (data: any[], sortBy: string, sortDir: string) => {
@@ -91,14 +111,20 @@ const Index = () => {
   const [sortBy, setSortBy] = useState('date')
   const [sortDir, setSortDir] = useState('asc')
   const [menuPos, setMenuPos] = useState({ top: 0, right: 0 })
+  const [selectedPdf, setSelectedPdf] = useState(null)
+  const bottomSheetRef = useRef<any>(null)
+  
+  const openSheet = (pdf: any) => {
+    setSelectedPdf(pdf)
+    bottomSheetRef.current?.expand()
+  }
+
 
   const filterBtnRef = useRef<View>(null)
-
   const closeMenu = () => {
     setShowMenu(false)
     setPage('main')
   }
-
   const openMenu = () => {
     filterBtnRef.current?.measure((_x, _y, width, height, pageX, pageY) => {
       setMenuPos({ top: pageY + height + 4, right: 20 })
@@ -108,15 +134,50 @@ const Index = () => {
 
   const sortedPdfs = getSortedPdfs(pdfs, sortBy, sortDir)
 
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const savedLayout = await AsyncStorage.getItem('layout')
+        const savedSortBy = await AsyncStorage.getItem('sortBy')
+        const savedSortDir = await AsyncStorage.getItem('sortDir')
+        if (savedLayout) setLayout(savedLayout)
+        if (savedSortBy) setSortBy(savedSortBy)
+        if (savedSortDir) setSortDir(savedSortDir)
+      } catch (e) {}
+    }
+    loadSettings()
+  }, [])
+
+  useEffect(() => { AsyncStorage.setItem('layout', layout) }, [layout])
+  useEffect(() => { AsyncStorage.setItem('sortBy', sortBy) }, [sortBy])
+  useEffect(() => { AsyncStorage.setItem('sortDir', sortDir) }, [sortDir])
+
+  const numColumns = layout === 'grid2' ? 2 : layout === 'grid3' ? 3 : layout === 'grid4' ? 4 : 1
+
+  const getPaddedPdfs = (data: any[], columns: number) => {
+    if (columns === 1) return data
+    const remainder = data.length % columns
+    if (remainder === 0) return data
+    const fillers = Array.from({ length: columns - remainder }, (_, i) => ({
+      id: `filler-${i}`,
+      filler: true,
+    }))
+    return [...data, ...fillers]
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <FlatList
-        data={sortedPdfs}
+        key={numColumns}
+        numColumns={numColumns}
+        data={getPaddedPdfs(sortedPdfs, numColumns)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PdfCard
             pdf={item}
             viewMode={layout}
+            onMorePress={openSheet}
+
           />
         )}
 
@@ -221,6 +282,10 @@ const Index = () => {
           </View>
         </>
       )}
+      <More
+        ref={bottomSheetRef}
+        pdf={selectedPdf}
+      />
     </View>
   )
 }
@@ -259,4 +324,4 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 9998,
   },
-}) 
+})

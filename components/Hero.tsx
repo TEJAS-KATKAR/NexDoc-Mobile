@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ScrollView, Dimensions, Animated, } from 'react-native'
 import React from 'react'
-import { useState, useRef } from 'react';
+import { useState, useRef } from 'react'; 
 const { width } = Dimensions.get('window');
 
 const Hero = () => {

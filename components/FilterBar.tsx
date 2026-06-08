@@ -1,19 +1,61 @@
 import React from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
+import Octicons from '@expo/vector-icons/Octicons';
+import { useState, useRef} from 'react';
+import { Animated } from 'react-native';
 
 const FilterBar = ({ layout, setLayout, showMenu, openMenu, page, setPage, sortBy, setSortBy, filterBtnRef }: any) => {
+const [category, setCategory] = useState('recent')
+const slideAnim = useRef(new Animated.Value(0)).current
+const changeTab = (tab: string, position: number) => {
+  setCategory(tab)
+
+  Animated.spring(slideAnim, {
+    toValue: position,
+    useNativeDriver: false,
+  }).start()
+}
 
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}>Files</Text>
+      <View style={styles.mainbtn}>
+      <Pressable onPress={() => changeTab('recent', 0)} style={styles.tabBtn}>
+        <Text style={[styles.tabText, category === 'recent' && styles.activeText]}>
+          Recent
+        </Text>
+      </Pressable>
+
+      <Pressable onPress={() => changeTab('favorites', 1)} style={styles.tabBtn}>
+        <Text style={[styles.tabText, category === 'favorites' && styles.activeText]}>
+          Favorites
+        </Text>
+      </Pressable>
+
+      <Pressable onPress={() => changeTab('device', 2)} style={styles.tabBtn}>
+        <Text style={[styles.tabText, category === 'device' && styles.activeText]}>
+          On Device
+        </Text>
+      </Pressable>
+      <Animated.View
+        style={[
+          styles.indicator,
+          {
+            left: slideAnim.interpolate({
+              inputRange: [0, 1, 2],
+              outputRange: [0, 94, 200],
+            }),
+          },
+        ]}
+      />
+      </View>
 
       <Pressable
         ref={filterBtnRef}
         style={styles.filterBtn}
         onPress={openMenu}
       >
-        <Text style={styles.filterText}>Filter</Text>
+        <Octicons name="filter" size={26} color="black" />
       </Pressable>
 
     </View>
@@ -43,7 +85,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffff',
   },
 
   filterText: {
@@ -51,33 +93,45 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  menu: {
-    position: 'absolute',
-    top: 55,
-    right: 20,
-    width: 200,
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#e5e5e5',
-    overflow: 'hidden',
-    zIndex: 9999,
-    elevation: 8,
+
+  mainbtn: {
+    justifyContent:'flex-start',
+    alignItems:'center',
+    marginRight:30,
+    flexDirection:'row',
+    gap:10,
+    position: 'relative',
   },
 
-  item: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderColor: '#f0f0f0',
+  tabBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: '#f2f2f2',
+    borderWidth:0.3,
+    alignItems: 'center',
+    minWidth: 70,
+    
+  },
+  
+  tabText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#8a8a8a',
   },
 
-  backdrop: {
-    position: 'absolute',
-    top: -1000,
-    left: -1000,
-    right: -1000,
-    bottom: -1000,
-    zIndex: 9998,
+  activeText: {
+    color: '#111',
   },
+  
+  indicator: {
+    position: 'absolute',
+    bottom: -10,
+    width: 74,
+    height: 3,
+    borderRadius: 10,
+    backgroundColor: '#111',
+    marginLeft:2,
+  },
+  
 })
