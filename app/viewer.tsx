@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Pressable, BackHandler} from 'react-native'
+import React, { useState , useEffect} from 'react'
 import { useLocalSearchParams, router } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
@@ -24,6 +24,7 @@ const Viewer = () => {
   const insets = useSafeAreaInsets()
   const { source } = useLocalSearchParams()
   const [activeTab, setActiveTab] = useState<string | null>(null)
+  const [sheetOpen, setSheetOpen] = useState(false)
 
 const bottomSheetRef = useRef<BottomSheet>(null)
 
@@ -40,8 +41,27 @@ const renderBackdrop = (props: any) => (
 
 const openTab = (tab: string) => {
   setActiveTab(tab)
+  setSheetOpen(true)
   bottomSheetRef.current?.expand()
 }
+useEffect(() => {
+  const backAction = () => {
+
+    if (sheetOpen) {
+      bottomSheetRef.current?.close()
+      return true
+    }
+
+    return false
+  }
+
+  const subscription = BackHandler.addEventListener(
+    'hardwareBackPress',
+    backAction
+  )
+
+  return () => subscription.remove()
+}, [sheetOpen])
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -232,6 +252,7 @@ const openTab = (tab: string) => {
           enablePanDownToClose
           backgroundStyle={{ backgroundColor: '#fff' }}
           handleIndicatorStyle={{ backgroundColor: '#999' }}
+          onClose={() => setSheetOpen(false)}
         >
           <BottomSheetView style={{ flex: 1 }}>
             {activeTab === 'pages' && <Pages />}

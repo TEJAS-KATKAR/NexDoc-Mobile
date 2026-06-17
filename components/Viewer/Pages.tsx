@@ -1,10 +1,65 @@
-import { View, Text } from 'react-native'
+import { View, Text, FlatList, Pressable } from 'react-native'
+
+const pages = Array.from({ length: 24 }, (_, i) => i + 1)
 
 export default function Pages() {
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, fontWeight: '600' }}>Pages</Text>
-      <Text style={{ marginTop: 10 }}>Page thumbnails will come here</Text>
-    </View>
+    <FlatList
+      data={pages}
+      numColumns={3}
+      keyExtractor={(item) => item.toString()}
+      contentContainerStyle={{ padding: 16 }}
+      columnWrapperStyle={{ justifyContent: 'space-between' }}
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item }) => (
+        <Pressable
+          style={{
+            width: '31%',
+            marginBottom: 12,
+            alignItems: 'center',
+          }}
+        >
+
+          <View
+            style={{
+              width: '100%',
+              height: 140,
+              backgroundColor: '#fff',
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: '#e5e5e5',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical:10,
+            }}
+          >
+            <Text style={{ color: '#bbb', fontSize: 12 }}>
+              Page Preview
+            </Text>
+          </View>
+
+          <View
+            style={{
+              position:'absolute',
+              bottom:-3,
+              backgroundColor: '#d9d9d9',
+              borderRadius: 8,
+              paddingVertical: 6,
+              paddingHorizontal: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 13,
+                
+              }}
+            >
+              {item}
+            </Text>
+          </View>
+
+        </Pressable>
+      )}
+    />
   )
 }
