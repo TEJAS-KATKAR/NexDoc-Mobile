@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable } from 'react-native'
+import { View, Text, FlatList, Pressable, TextInput } from 'react-native'
 
 const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
@@ -6,7 +6,8 @@ export default function Pages() {
   return (
     <FlatList
       data={pages}
-      numColumns={3}
+      numColumns={5}
+      key="pages-grid-5"
       keyExtractor={(item) => item.toString()}
       contentContainerStyle={{
         padding: 16,
@@ -14,137 +15,158 @@ export default function Pages() {
       }}
       columnWrapperStyle={{
         justifyContent: 'space-between',
+        marginBottom: 12,
       }}
       showsVerticalScrollIndicator={false}
+      ListHeaderComponent={
+        <View
+          style={{
+            flexDirection: 'row',
+            marginBottom: 16,
+          }}
+        >
+          <TextInput
+            placeholder="# Jump to page..."
+            placeholderTextColor="#9CA3AF"
+            style={{
+              flex: 1,
+              height: 40,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 12,
+              paddingHorizontal: 12,
+              borderWidth: 1,
+              borderColor: '#E5E7EB',
+              fontSize: 12,
+            }}
+          />
+
+          <Pressable
+            style={{
+              marginLeft: 8,
+              backgroundColor: '#6366F1',
+              borderRadius: 12,
+              width: 42,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{
+                color: '#FFFFFF',
+                fontSize: 12,
+                fontWeight: '600',
+              }}
+            >
+              Go
+            </Text>
+          </Pressable>
+        </View>
+      }
       renderItem={({ item }) => {
-        const isCurrentPage = item === 12
-      
+        const isCurrentPage = item === 2
+
         return (
           <Pressable
             style={{
-              width: '31%',
-              marginBottom: 18,
+              width: '18%',
+              alignItems: 'center',
             }}
           >
             <View
               style={{
-                height: 170,
+                width: '100%',
+                aspectRatio: 0.72,
                 backgroundColor: '#FFFFFF',
-                borderRadius: 12,
+                borderRadius: 8,
                 borderWidth: isCurrentPage ? 2 : 1,
                 borderColor: isCurrentPage
                   ? '#6366F1'
                   : '#E5E7EB',
-                overflow: 'hidden',
-      
-                shadowColor: '#000',
-                shadowOpacity: 0.08,
-                shadowRadius: 8,
-                shadowOffset: { width: 0, height: 3 },
-                elevation: 3,
+                padding: 4,
               }}
             >
               <View
                 style={{
-                  flex: 1,
-                  padding: 8,
+                  height: 3,
+                  backgroundColor: '#6B7280',
+                  borderRadius: 2,
+                  marginBottom: 3,
                 }}
-              >
-                <View
-                  style={{
-                    height: 8,
-                    backgroundColor: '#E5E7EB',
-                    borderRadius: 3,
-                    marginBottom: 8,
-                  }}
-                />
-      
-                <View
-                  style={{
-                    height: 6,
-                    backgroundColor: '#F3F4F6',
-                    borderRadius: 3,
-                    marginBottom: 6,
-                  }}
-                />
-      
-                <View
-                  style={{
-                    height: 6,
-                    width: '90%',
-                    backgroundColor: '#F3F4F6',
-                    borderRadius: 3,
-                    marginBottom: 6,
-                  }}
-                />
-      
-                <View
-                  style={{
-                    height: 6,
-                    width: '70%',
-                    backgroundColor: '#F3F4F6',
-                    borderRadius: 3,
-                    marginBottom: 16,
-                  }}
-                />
-      
-                <View
-                  style={{
-                    height: 60,
-                    backgroundColor: '#F9FAFB',
-                    borderRadius: 8,
-                    marginBottom: 10,
-                  }}
-                />
-      
-                <View
-                  style={{
-                    height: 6,
-                    backgroundColor: '#F3F4F6',
-                    borderRadius: 3,
-                    marginBottom: 6,
-                  }}
-                />
-      
-                <View
-                  style={{
-                    height: 6,
-                    width: '80%',
-                    backgroundColor: '#F3F4F6',
-                    borderRadius: 3,
-                  }}
-                />
-              </View>
+              />
+
+              <View
+                style={{
+                  height: 2,
+                  backgroundColor: '#D1D5DB',
+                  borderRadius: 2,
+                  marginBottom: 2,
+                }}
+              />
+
+              <View
+                style={{
+                  height: 2,
+                  width: '85%',
+                  backgroundColor: '#D1D5DB',
+                  borderRadius: 2,
+                  marginBottom: 2,
+                }}
+              />
+
+              <View
+                style={{
+                  height: 2,
+                  width: '70%',
+                  backgroundColor: '#D1D5DB',
+                  borderRadius: 2,
+                  marginBottom: 2,
+                }}
+              />
+
+              <View
+                style={{
+                  height: 2,
+                  backgroundColor: '#D1D5DB',
+                  borderRadius: 2,
+                  marginBottom: 2,
+                }}
+              />
+
+              <View
+                style={{
+                  height: 2,
+                  width: '90%',
+                  backgroundColor: '#D1D5DB',
+                  borderRadius: 2,
+                  marginBottom: 2,
+                }}
+              />
+
+              <View
+                style={{
+                  height: 2,
+                  width: '75%',
+                  backgroundColor: '#D1D5DB',
+                  borderRadius: 2,
+                }}
+              />
             </View>
-      
-            <View
+
+            <Text
               style={{
-                alignSelf: 'center',
-                marginTop: 8,
-                backgroundColor: isCurrentPage
+                marginTop: 4,
+                fontSize: 10,
+                fontWeight: isCurrentPage ? '700' : '500',
+                color: isCurrentPage
                   ? '#6366F1'
-                  : '#EEF2F7',
-                borderRadius: 999,
-                paddingHorizontal: 12,
-                paddingVertical: 4,
+                  : '#9CA3AF',
               }}
             >
-              <Text
-                style={{
-                  color: isCurrentPage
-                    ? '#FFFFFF'
-                    : '#6B7280',
-                  fontSize: 11,
-                  fontWeight: '600',
-                }}
-              >
-                {item}
-              </Text>
-            </View>
+              {item}
+            </Text>
           </Pressable>
         )
       }}
-      
     />
   )
 }

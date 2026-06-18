@@ -40,7 +40,7 @@ export default function Ai() {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         padding: 16,
-        paddingBottom: 120,
+        paddingBottom: 12,
       }}
       style={{
         flex: 1,

@@ -1,4 +1,4 @@
-import { View, Text, Pressable, BackHandler} from 'react-native'
+import { View, Text, Pressable, BackHandler, TextInput} from 'react-native'
 import React, { useState , useEffect} from 'react'
 import { useLocalSearchParams, router } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -7,7 +7,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
-
+import Octicons from '@expo/vector-icons/Octicons';
 
 import Pages from '@/components/Viewer/Pages'
 import Content from '@/components/Viewer/Content'
@@ -20,6 +20,8 @@ const Viewer = () => {
   const insets = useSafeAreaInsets()
   const { source } = useLocalSearchParams()
   const [activeTab, setActiveTab] = useState<string | null>(null)
+  const [showSearch, setShowSearch] = useState(false)
+  const [searchText, setSearchText] = useState('')
 
   const panelHeights = {
     pages: '75%',
@@ -90,8 +92,15 @@ return (
           </Text>
         </View>
 
-        <Pressable style={{ padding: 8 }}>
-          <Ionicons name="search" size={24} color="#111" />
+        <Pressable
+          onPress={() => setShowSearch(prev => !prev)}
+          style={{ padding: 8 }}
+        >
+          <Ionicons
+            name={showSearch ? 'close' : 'search'}
+            size={24}
+            color="#111"
+          />
         </Pressable>
 
         <Pressable style={{ padding: 8 }}>
@@ -99,7 +108,65 @@ return (
         </Pressable>
 
       </View>
+      
     </View>
+    {showSearch && (
+  <View
+    style={{
+      paddingHorizontal: 18,
+      paddingVertical: 12,
+      backgroundColor: '#FFFFFF',
+      borderBottomWidth: 1,
+      borderBottomColor: '#F1F1F1',
+    }}
+  >
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+    >
+      <TextInput
+        value={searchText}
+        onChangeText={setSearchText}
+        placeholder="Search in PDF..."
+        placeholderTextColor="#9CA3AF"
+        style={{
+          flex: 1,
+          height: 42,
+          backgroundColor: '#F8F9FC',
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: '#E5E7EB',
+          paddingHorizontal: 14,
+          fontSize: 13,
+        }}
+      />
+
+      <Pressable
+        style={{
+          marginLeft: 8,
+          height: 42,
+          paddingHorizontal: 18,
+          backgroundColor: '#6366F1',
+          borderRadius: 12,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color: '#FFFFFF',
+            fontWeight: '600',
+            fontSize: 13,
+          }}
+        >
+          Find
+        </Text>
+      </Pressable>
+    </View>
+  </View>
+)}
 
     {/* PDF Area */}
 
@@ -231,40 +298,38 @@ return (
       <BottomItem
         active={activeTab === 'pages'}
         onPress={() => setActiveTab(activeTab === 'pages' ? null : 'pages')}
-        icon={<MaterialIcons name="grid-view" size={22} color={activeTab === 'pages' ? '#2563eb' : '#777'} />}
+        icon={<MaterialIcons name="grid-view" size={22} color={activeTab === 'pages' ? '#6366F1' : '#777'} />}
         label="Pages"
       />
 
       <BottomItem
         active={activeTab === 'contents'}
         onPress={() => setActiveTab(activeTab === 'contents' ? null : 'contents')}
-        icon={<Ionicons name="list-outline" size={22} color={activeTab === 'contents' ? '#2563eb' : '#777'} />}
+        icon={<Ionicons name="list" size={22} color={activeTab === 'contents' ? '#6366F1' : '#777'} />}
         label="Contents"
-      />
-
-      <BottomItem
-        active={activeTab === 'notes'}
-        onPress={() => setActiveTab(activeTab === 'notes' ? null : 'notes')}
-        icon={<Ionicons name="document-text-outline" size={22} color={activeTab === 'notes' ? '#2563eb' : '#777'} />}
-        label="Notes"
       />
 
       <BottomItem
         active={activeTab === 'ai'}
         onPress={() => setActiveTab(activeTab === 'ai' ? null : 'ai')}
-        icon={<FontAwesome6 name="sparkles" size={18} color={activeTab === 'ai' ? '#2563eb' : '#777'} />}
+        icon={<Octicons name="sparkles-fill" size={24}  color={activeTab === 'ai' ? '#6366F1' : '#777'} />}
         label="AI"
+      />
+
+      <BottomItem
+        active={activeTab === 'notes'}
+        onPress={() => setActiveTab(activeTab === 'notes' ? null : 'notes')}
+        icon={<Ionicons name="document-text-outline" size={22} color={activeTab === 'notes' ? '#6366F1' : '#777'} />}
+        label="Notes"
       />
 
       <BottomItem
         active={activeTab === 'more'}
         onPress={() => setActiveTab(activeTab === 'more' ? null : 'more')}
-        icon={<Ionicons name="ellipsis-horizontal" size={22} color={activeTab === 'more' ? '#2563eb' : '#777'} />}
+        icon={<Ionicons name="ellipsis-horizontal" size={22} color={activeTab === 'more' ? '#6366F1' : '#777'} />}
         label="More"
       />
 
-      
-      
 
     </View>
 
@@ -289,7 +354,7 @@ const BottomItem = ({ icon, label, active, onPress }: any) => {
           marginTop: 4,
           fontSize: 12,
           fontWeight: active ? '600' : '400',
-          color: active ? '#2563eb' : '#777',
+          color: active ? '#6366F1' : '#777',
         }}
       >
         {label}
