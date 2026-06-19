@@ -1,15 +1,9 @@
 import { Tabs, usePathname, useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-  StyleSheet,
-  Platform,
-} from 'react-native'
+import {View,Text,TouchableOpacity,Animated,StyleSheet,Platform,} from 'react-native'
 import { useRef, useCallback } from 'react'
+
 
 const TABS =  [
   {
