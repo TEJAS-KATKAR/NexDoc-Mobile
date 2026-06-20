@@ -17,6 +17,7 @@ export const FEATURED = [
   },
 ]
 
+
 export const TOOL_SECTIONS = [
   {
     title: 'Create & Convert',
