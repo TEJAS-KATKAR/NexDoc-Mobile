@@ -132,6 +132,7 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
     </View>
     )
   }
+
   
   if (viewMode === 'grid4') {
     return (
