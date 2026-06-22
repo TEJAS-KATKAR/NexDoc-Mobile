@@ -16,17 +16,17 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
               name: pdf.name,
             },
           })}
-          style={{ width: '100%', paddingHorizontal: 10 }}
+          style={{ width: '100%', paddingHorizontal: 14 }}
         >
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderColor: '#e5e5e5' }}>
 
           <Image
             source={{ uri: pdf.image }}
-            style={{ width: 70, height: 80, borderRadius: 8, backgroundColor: '#d0d0d0' }}
+            style={{ width: 68, height:78, borderRadius: 8, backgroundColor: '#d0d0d0' }}
           />
 
           <View style={{ marginLeft: 10, flex: 1 }}>
-            <Text  ellipsizeMode="middle" style={{ fontSize: 16, fontWeight: '700' }}>
+            <Text  ellipsizeMode="middle" style={{ fontSize: 15, fontWeight: '700' }}>
               {pdf.name}
             </Text>
 
@@ -67,7 +67,7 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
               name: pdf.name,
             },
           })}
-          style={{ flex:1, margin: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 10, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}
+          style={{ flex:1, margin: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 4, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}
         >
           <View style={{ width: '100%',  }}>
               <View style={{ width: '100%', height: 180, borderRadius: 10, overflow: 'hidden', }}>
@@ -79,7 +79,7 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
               </Pressable>
                 <Image
                   source={{ uri: pdf.image }}
-                  style={{ width: '100%', height: '100%', borderRadius: 10, backgroundColor: '#d0d0d0' }}
+                  style={{ width: '100%', height: '100%', borderRadius: 6, backgroundColor: '#d0d0d0' }}
                   resizeMode='cover'
                 />
               </View>
@@ -106,12 +106,12 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
 
   if (viewMode === 'grid3') {
     return (
-      <View style={{ flex:1, margin: 2,justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 10, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}>
+      <View style={{ flex:1, margin: 2,justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 4, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}>
       <View style={{ width: '100%',  }}>
             <View style={{ width: '100%', height: 120, borderRadius: 10, overflow: 'hidden', }}>
               <Image
                 source={{ uri: pdf.image }}
-                style={{ width: '100%', height: '100%', borderRadius: 10, backgroundColor: '#d0d0d0' }}
+                style={{ width: '100%', height: '100%', borderRadius: 6, backgroundColor: '#d0d0d0' }}
                 resizeMode='cover'
               />
             </View>
@@ -134,12 +134,12 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
   }
   if (viewMode === 'grid4') {
     return (
-      <View style={{ flex:1, margin: 2,justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 10, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}>
+      <View style={{ flex:1, margin: 2,justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 4, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}>
       <View style={{ width: '100%',  }}>
             <View style={{ width: '100%', height: 90, borderRadius: 10, overflow: 'hidden', }}>
               <Image
                 source={{ uri: pdf.image }}
-                style={{ width: '100%', height: '100%', borderRadius: 10, backgroundColor: '#d0d0d0' }}
+                style={{ width: '100%', height: '100%', borderRadius: 6, backgroundColor: '#d0d0d0' }}
                 resizeMode='cover'
               />
             </View>

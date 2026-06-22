@@ -2,11 +2,12 @@ import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import Hero from '@/components/Hero'
-import Topbar from '@/components/Topbar'
-import PdfCard from '@/components/PdfCard'
-import FilterBar from '@/components/FilterBar'
-import More from '@/components/More'
+import Hero from '@/components/Main/Hero'
+import Topbar from '@/components/Main/Topbar'
+import PdfCard from '@/components/Main/PdfCard'
+import FilterBar from '@/components/Main/FilterBar'
+import More from '@/components/Main/More'
+import Categories from '@/components/Main/Categories'
 
 const pdfs = [
   {
@@ -186,6 +187,7 @@ const Index = () => {
             <View style={{ marginTop: 40 }}>
               <Topbar />
               <Hero />
+              <Categories />
               <FilterBar
                 layout={layout}
                 setLayout={setLayout}

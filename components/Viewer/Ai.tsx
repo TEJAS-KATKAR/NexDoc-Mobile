@@ -15,7 +15,7 @@ const cards = [
     subtitle: 'RAG-powered Q&A',
     icon: 'chat-processing-outline',
     iconBg: '#F3F0FF',
-    iconColor: '#8B5CF6',
+    iconColor: '#6366F1',
     badge: 'New',
   },
   {
