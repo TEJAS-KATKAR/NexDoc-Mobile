@@ -132,6 +132,7 @@ const PdfCard = ({ pdf, viewMode, onMorePress }: any) => {
     </View>
     )
   }
+  
   if (viewMode === 'grid4') {
     return (
       <View style={{ flex:1, margin: 2,justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 4, padding: 8, borderWidth: 1, borderColor: '#e5e5e5' }}>
