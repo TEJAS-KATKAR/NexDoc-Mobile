@@ -184,7 +184,7 @@ export default function Categories() {
     <View
         style={{
             marginBottom: 24,
-            marginHorizontal: 20,
+            marginLeft: 20,
         }}
         >
 
@@ -228,7 +228,7 @@ export default function Categories() {
         
         renderItem={({ item }) => {
           const isAdd = item.id === 'add'
-
+ 
           return (
             <Pressable
               onPress={() => {

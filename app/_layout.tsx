@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import 'react-native-reanimated'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { SettingsProvider } from '@/contexts/SettingsContext'
 
 
 export const unstable_settings = {
@@ -17,6 +18,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
       <BottomSheetModalProvider>
+      <SettingsProvider>
         <ThemeProvider value={DefaultTheme}>
           <Stack screenOptions={{headerShown: false}}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -24,6 +26,7 @@ export default function RootLayout() {
 
           <StatusBar style="auto" />
         </ThemeProvider>
+        </SettingsProvider>
         </BottomSheetModalProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

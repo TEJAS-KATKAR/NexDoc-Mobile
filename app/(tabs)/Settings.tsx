@@ -1,11 +1,28 @@
 import { ScrollView, View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
+import { useState } from 'react'
 import UpgradeCard from '@/components/Settings/UpgradeCard'
 import SettingsSection from '@/components/Settings/SettingsSection'
 import SettingsRow from '@/components/Settings/SettingsRow'
+import ThemeModal from '@/components/Settings/ThemeModal'
+import { useSettings } from '@/contexts/SettingsContext'
+
 
 export default function Settings() {
+  
+  const {
+    showCategories,
+    toggleCategories,
+    showHero,
+    toggleHero,
+    theme,
+    changeTheme,
+  } = useSettings()
+
+  const [showThemeModal, setShowThemeModal] =
+  useState(false)
+
+
   return (
     <SafeAreaView
       edges={['top']}
@@ -48,9 +65,11 @@ export default function Settings() {
 
         <SettingsSection title="Reader">
           <SettingsRow
-            icon="moon-outline"
-            title="Dark Mode"
-            subtitle="Reader appearance"
+            icon="color-palette-outline"
+            title="Themes"
+            subtitle="Customize app appearance"
+            rightText={theme}
+            onPress={() => setShowThemeModal(true)}
           />
 
           <SettingsRow
@@ -64,6 +83,23 @@ export default function Settings() {
             title="Default Zoom"
             subtitle="Reading zoom level"
             rightText="100%"
+          />
+
+          <SettingsRow
+            icon="albums-outline"
+            title="Show Hero Banner"
+            subtitle="Display welcome section"
+            switchValue={showHero}
+            onSwitchChange={toggleHero}
+          />
+
+          <SettingsRow
+            icon="grid-outline"
+            title="Show Categories"
+            subtitle="Display category section on home page"
+            switchValue={showCategories}
+            onSwitchChange={toggleCategories}
+            
           />
 
           <SettingsRow
@@ -128,6 +164,17 @@ export default function Settings() {
         </SettingsSection>
 
       </ScrollView>
+        <ThemeModal
+          visible={showThemeModal}
+          currentTheme={theme}
+          onClose={() =>
+            setShowThemeModal(false)
+          }
+          onSelectTheme={(selectedTheme: string) => {
+            changeTheme(selectedTheme)
+            setShowThemeModal(false)
+          }}
+        />
     </SafeAreaView>
   )
 }

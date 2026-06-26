@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native'
 import Octicons from '@expo/vector-icons/Octicons';
 import { useState, useRef} from 'react';
 import { Animated } from 'react-native';
+import { useSettings, THEMES } from '@/contexts/SettingsContext'
 
 const FilterBar = ({ layout, setLayout, showMenu, openMenu, page, setPage, sortBy, setSortBy, filterBtnRef }: any) => {
 const [category, setCategory] = useState('recent')
@@ -16,48 +17,135 @@ const changeTab = (tab: string, position: number) => {
   }).start()
 }
 
+const { theme } = useSettings()
+
+const colors =
+  THEMES[theme as keyof typeof THEMES] ||
+  THEMES.light
+
   return (
-    <View style={styles.container}>
-
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+          borderColor: colors.border,
+        },
+      ]}
+    >
       <View style={styles.mainbtn}>
-      <Pressable onPress={() => changeTab('recent', 0)} style={styles.tabBtn}>
-        <Text style={[styles.tabText, category === 'recent' && styles.activeText]}>
-          Recent
-        </Text>
-      </Pressable>
+        <Pressable
+          onPress={() => changeTab('recent', 0)}
+          style={[
+            styles.tabBtn,
+            {
+              backgroundColor:
+                category === 'recent'
+                  ? colors.chipActive
+                  : colors.chip,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              {
+                color:
+                  category === 'recent'
+                    ? colors.text
+                    : colors.secondaryText,
+              },
+            ]}
+          >
+            Recent
+          </Text>
+        </Pressable>
 
-      <Pressable onPress={() => changeTab('favorites', 1)} style={styles.tabBtn}>
-        <Text style={[styles.tabText, category === 'favorites' && styles.activeText]}>
-          Favorites
-        </Text>
-      </Pressable>
+        <Pressable
+          onPress={() => changeTab('favorites', 1)}
+          style={[
+            styles.tabBtn,
+            {
+              backgroundColor:
+                category === 'favorites'
+                  ? colors.chipActive
+                  : colors.chip,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              {
+                color:
+                  category === 'favorites'
+                    ? colors.text
+                    : colors.secondaryText,
+              },
+            ]}
+          >
+            Favorites
+          </Text>
+        </Pressable>
 
-      <Pressable onPress={() => changeTab('device', 2)} style={styles.tabBtn}>
-        <Text style={[styles.tabText, category === 'device' && styles.activeText]}>
-          On Device
-        </Text>
-      </Pressable>
-      <Animated.View
-        style={[
-          styles.indicator,
-          {
-            left: slideAnim.interpolate({
-              inputRange: [0, 1, 2],
-              outputRange: [0, 94, 200],
-            }),
-          },
-        ]}
-      />
+        <Pressable
+          onPress={() => changeTab('device', 2)}
+          style={[
+            styles.tabBtn,
+            {
+              backgroundColor:
+                category === 'device'
+                  ? colors.chipActive
+                  : colors.chip,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              {
+                color:
+                  category === 'device'
+                    ? colors.text
+                    : colors.secondaryText,
+              },
+            ]}
+          >
+            On Device
+          </Text>
+        </Pressable>
+
+        <Animated.View
+          style={[
+            styles.indicator,
+            {
+              backgroundColor: colors.accent,
+              left: slideAnim.interpolate({
+                inputRange: [0, 1, 2],
+                outputRange: [0, 94, 200],
+              }),
+            },
+          ]}
+        />
       </View>
 
       <Pressable
         ref={filterBtnRef}
-        style={styles.filterBtn}
+        style={[
+          styles.filterBtn,
+          
+        ]}
         onPress={openMenu}
       >
-        <Octicons name="filter" size={26} color="black" />
+        <Octicons
+          name="filter"
+          size={26}
+          color={colors.accent}
+        />
       </Pressable>
-
     </View>
   )
 }
@@ -71,9 +159,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderColor: '#e5e5e5',
+
   },
 
   title: {
@@ -84,8 +171,8 @@ const styles = StyleSheet.create({
   filterBtn: {
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 10,
-    backgroundColor: '#ffffff',
+    
+    
   },
 
   filterText: {
@@ -107,7 +194,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: '#f2f2f2',
     borderWidth:0.3,
     alignItems: 'center',
     minWidth: 70,

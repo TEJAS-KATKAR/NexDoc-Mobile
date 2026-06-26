@@ -7,11 +7,17 @@ import {
   Animated,
 } from 'react-native'
 import React from 'react'
+import { useSettings, THEMES } from '@/contexts/SettingsContext'
 import { useState, useRef } from 'react'
 
 const { width } = Dimensions.get('window')
 
 const Hero = () => {
+  const { theme } = useSettings()
+  const colors =
+  THEMES[theme as keyof typeof THEMES] ||
+  THEMES.light
+  
   const [activeIndex, setActiveIndex] = useState(0)
   const animatedIndex = useRef(new Animated.Value(0)).current
 
@@ -26,7 +32,7 @@ const Hero = () => {
       pdf: 'Machine Learning\nFundamentals',
       subtitle: 'Chapter 3 • pg 47',
       progress: 42,
-      color: '#111111',
+      color: colors.hero,
     },
 
     {
@@ -35,7 +41,7 @@ const Hero = () => {
       title: 'New Arrival',
       pdf: 'Web Accessibility\nGuide',
       subtitle: 'Just added',
-      color: '#1A1A1A',
+      color: colors.hero,
     },
 
     {
@@ -44,7 +50,7 @@ const Hero = () => {
       title: 'See More-->',
       pdf: 'More features',
       subtitle: '',
-      color: '#1F1F1F',
+      color: colors.hero,
     },
   ]
 
@@ -91,7 +97,7 @@ const Hero = () => {
           style={{
             fontSize: 24,
             fontWeight: '800',
-            color: '#111827',
+            color: colors.text,
           }}
         >
           Welcome Back!
@@ -100,7 +106,7 @@ const Hero = () => {
         <Text
           style={{
             fontSize: 13,
-            color: '#9CA3AF',
+            color: colors.secondaryText,
             marginTop: 2,
           }}
         >
@@ -165,7 +171,7 @@ const Hero = () => {
               <Text
               
                 style={{
-                  color: '#B9C6FF',
+                  color: colors.accent,
                   fontSize: 12,
                   fontWeight: '500',
                 }}
@@ -188,7 +194,7 @@ const Hero = () => {
 
               <Text
                 style={{
-                  color: '#A1A1AA',
+                  color: colors.secondaryText,
                   fontSize: 10,
                   marginTop: 2,
                 }}
@@ -204,7 +210,7 @@ const Hero = () => {
                 <View
                   style={{
                     height: 3,
-                    backgroundColor: '#2D2D2D',
+                    backgroundColor: colors.chip,
                     borderRadius: 999,
                     overflow: 'hidden',
                   }}
@@ -214,14 +220,14 @@ const Hero = () => {
                     style={{
                       width: `${item.progress}%`,
                       height: '100%',
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: colors.accent,
                     }}
                   />
                 </View>
 
                 <Text
                   style={{
-                    color: '#A1A1AA',
+                    color: colors.secondaryText,
                     fontSize: 9,
                     textAlign: 'right',
                     marginTop: 2,
@@ -265,7 +271,7 @@ const Hero = () => {
               ],
               outputRange: [
                 '#D4D4D8',
-                '#111111',
+                colors.accent,
                 '#D4D4D8',
               ],
               extrapolate: 'clamp',

@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, Pressable, Switch } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 export default function SettingsRow({
@@ -6,9 +6,14 @@ export default function SettingsRow({
   title,
   subtitle,
   rightText,
+  switchValue,
+  onSwitchChange,
+  onPress,
 }: any) {
+
   return (
     <Pressable
+      onPress={onPress}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -70,11 +75,18 @@ export default function SettingsRow({
         </Text>
       )}
 
-      <Ionicons
-        name="chevron-forward"
-        size={18}
-        color="#D1D5DB"
-      />
+      {typeof switchValue === 'boolean' ? (
+        <Switch
+          value={switchValue}
+          onValueChange={onSwitchChange}
+        />
+      ) : (
+        <Ionicons
+          name="chevron-forward"
+          size={18}
+          color="#D1D5DB"
+        />
+      )}
     </Pressable>
   )
 }

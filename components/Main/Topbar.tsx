@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { useSettings, THEMES } from '@/contexts/SettingsContext'
 import {
   View,
   Text,
@@ -31,11 +32,26 @@ export default function Topbar() {
     return COLORS[index]
   }, [])
 
+  const { theme } = useSettings()
+
+  const colors =
+    THEMES[theme as keyof typeof THEMES] ||
+    THEMES.light
+
+  const [searchFocused, setSearchFocused] =
+    useState(false)
+
+  const [profilePressed, setProfilePressed] =
+  useState(false)
+
+  const [premiumPressed, setPremiumPressed] =
+  useState(false)
+
   return (
     <>
       <View
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: colors.background,
           flexDirection: 'row',
           alignItems: 'center',
           paddingHorizontal: 18,
@@ -45,6 +61,8 @@ export default function Topbar() {
       >
         <Pressable
           onPress={() => setShowLogin(true)}
+          onPressIn={() => setProfilePressed(true)}
+          onPressOut={() => setProfilePressed(false)}
           style={{
             width: 40,
             height: 40,
@@ -52,8 +70,10 @@ export default function Topbar() {
             backgroundColor: userColor,
             justifyContent: 'center',
             alignItems: 'center',
-            borderWidth:1,
-            borderColor:'#dcdcdc'
+            borderWidth: 2,
+            borderColor: profilePressed
+              ? '#2563EB'
+              : colors.border
           }}
         >
           <Text
@@ -73,43 +93,52 @@ export default function Topbar() {
             marginHorizontal: 12,
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#F5F5F5',
+            backgroundColor: colors.chip,
             borderRadius: 999,
             height: 42,
             paddingHorizontal: 14,
-            borderWidth:1,
-            borderColor:'#dcdcdc'
+            borderWidth: 1.5,
+            borderColor: searchFocused
+              ? '#2563EB'
+              : colors.border,
           }}
         >
           <Search
             size={16}
-            color="#9CA3AF"
+            color={colors.secondaryText}
           />
 
           <TextInput
             placeholder="Search documents..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.secondaryText}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
             style={{
               flex: 1,
               marginLeft: 8,
+              color: colors.text,
             }}
           />
         </View>
 
         <Pressable
+        onPressIn={() => setPremiumPressed(true)}
+        onPressOut={() => setPremiumPressed(false)}
           style={{
             width: 40,
             height: 40,
             borderRadius: 999,
             borderWidth: 1,
-            borderColor: '#F4D06F',
+            borderColor: premiumPressed
+              ? '#2563EB'
+              : colors.accent,
             justifyContent: 'center',
             alignItems: 'center',
           }}
-        >
+        > 
           <Crown
             size={22}
-            color="#EAB308"
+            color={colors.accent}
           />
         </Pressable>
       </View>
