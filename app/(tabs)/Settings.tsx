@@ -1,15 +1,13 @@
-import { ScrollView, View, Text } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import UpgradeCard from '@/components/Settings/UpgradeCard'
-import SettingsSection from '@/components/Settings/SettingsSection'
-import SettingsRow from '@/components/Settings/SettingsRow'
-import ThemeModal from '@/components/Settings/ThemeModal'
-import { useSettings } from '@/contexts/SettingsContext'
-
+import SettingsRow from "@/components/Settings/SettingsRow";
+import SettingsSection from "@/components/Settings/SettingsSection";
+import ThemeModal from "@/components/Settings/ThemeModal";
+import UpgradeCard from "@/components/Settings/UpgradeCard";
+import { useSettings } from "@/contexts/SettingsContext";
+import { useState } from "react";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Settings() {
-  
   const {
     showCategories,
     toggleCategories,
@@ -17,18 +15,16 @@ export default function Settings() {
     toggleHero,
     theme,
     changeTheme,
-  } = useSettings()
+  } = useSettings();
 
-  const [showThemeModal, setShowThemeModal] =
-  useState(false)
-
+  const [showThemeModal, setShowThemeModal] = useState(false);
 
   return (
     <SafeAreaView
-      edges={['top']}
+      edges={["top"]}
       style={{
         flex: 1,
-        backgroundColor: '#F8F9FC',
+        backgroundColor: "#F8F9FC",
       }}
     >
       <ScrollView
@@ -43,8 +39,8 @@ export default function Settings() {
           <Text
             style={{
               fontSize: 28,
-              fontWeight: '800',
-              color: '#111827',
+              fontWeight: "800",
+              color: "#111827",
             }}
           >
             Settings
@@ -53,7 +49,7 @@ export default function Settings() {
           <Text
             style={{
               fontSize: 13,
-              color: '#9CA3AF',
+              color: "#9CA3AF",
               marginTop: 4,
             }}
           >
@@ -99,7 +95,6 @@ export default function Settings() {
             subtitle="Display category section on home page"
             switchValue={showCategories}
             onSwitchChange={toggleCategories}
-            
           />
 
           <SettingsRow
@@ -139,22 +134,16 @@ export default function Settings() {
           />
 
           <SettingsRow
-            icon="broom-outline"
+            icon="trash-bin-outline"
             title="Clear Cache"
             subtitle="Free device storage"
           />
         </SettingsSection>
 
         <SettingsSection title="About">
-          <SettingsRow
-            icon="star-outline"
-            title="Rate NexDoc"
-          />
+          <SettingsRow icon="star-outline" title="Rate NexDoc" />
 
-          <SettingsRow
-            icon="shield-checkmark-outline"
-            title="Privacy Policy"
-          />
+          <SettingsRow icon="shield-checkmark-outline" title="Privacy Policy" />
 
           <SettingsRow
             icon="information-circle-outline"
@@ -162,19 +151,16 @@ export default function Settings() {
             rightText="1.0.0"
           />
         </SettingsSection>
-
       </ScrollView>
-        <ThemeModal
-          visible={showThemeModal}
-          currentTheme={theme}
-          onClose={() =>
-            setShowThemeModal(false)
-          }
-          onSelectTheme={(selectedTheme: string) => {
-            changeTheme(selectedTheme)
-            setShowThemeModal(false)
-          }}
-        />
+      <ThemeModal
+        visible={showThemeModal}
+        currentTheme={theme}
+        onClose={() => setShowThemeModal(false)}
+        onSelectTheme={(selectedTheme: string) => {
+          changeTheme(selectedTheme);
+          setShowThemeModal(false);
+        }}
+      />
     </SafeAreaView>
-  )
+  );
 }
