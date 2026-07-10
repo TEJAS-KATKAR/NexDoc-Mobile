@@ -155,7 +155,7 @@ export default FilterBar
 const styles = StyleSheet.create({
   container: {
     height: 60,
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

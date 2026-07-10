@@ -6,7 +6,10 @@ import NewCategory from './NewCategory'
 import HoldCategory from './HoldCategory'
 
 
-export default function Categories() {
+export default function Categories( {
+  onPdfAdded,
+    }: any) {
+
     const [categories, setCategories] = useState([
       {
         id: '1',
@@ -312,6 +315,7 @@ export default function Categories() {
         category={activeCategory}
         onClose={() => setShowCategory(false)}
         onColorChange={handleColorChange}
+        onPdfAdded={onPdfAdded}
       />
       <NewCategory
         visible={showNewCategory}

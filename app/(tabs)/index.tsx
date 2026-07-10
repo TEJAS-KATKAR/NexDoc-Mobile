@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native'
+import { StyleSheet, View, FlatList, Pressable, Text,AppState } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -10,72 +10,14 @@ import More from '@/components/Main/More'
 import Categories from '@/components/Main/Categories'
 import { useSettings } from '@/contexts/SettingsContext'
 import { THEMES } from '@/contexts/SettingsContext'
+import { loadPdfs } from '@/services/pdfService'
+import PermissionCard from '@/components/Main/PermissionCard'
 
-const pdfs = [
-  {
-    id: '1',
-    name: 'React Notes of the week with additional information.pdf',
-    size: '2.4 MB',
-    date: '28/5/26',
-    time: '10:30 AM',
-    image: 'https://picsum.photos/200/300',
-    sizeBytes: 2.4,
-  },
-  {
-    id: '2',
-    name: 'JavaScript Guide.pdf',
-    size: '5.1 MB',
-    date: '27/5/26',
-    time: '2:15 PM',
-    image: 'https://picsum.photos/200/301',
-    sizeBytes: 5.1,
-  },
-  {
-    id: '3',
-    name: 'TypeScript Handbook.pdf',
-    size: '3.8 MB',
-    date: '26/5/26',
-    time: '9:45 AM',
-    image: 'https://picsum.photos/200/302',
-    sizeBytes: 3.8,
-  },
-  {
-    id: '4',
-    name: 'Node.js Best Practices.pdf',
-    size: '4.2 MB',
-    date: '25/5/26',
-    time: '11:20 AM',
-    image: 'https://picsum.photos/200/303',
-    sizeBytes: 4.2,
-  },
-  {
-    id: '5',
-    name: 'CSS Tricks.pdf',
-    size: '1.9 MB',
-    date: '24/5/26',
-    time: '3:10 PM',
-    image: 'https://picsum.photos/200/304',
-    sizeBytes: 1.9,
-  },
-  {
-    id: '6',
-    name: 'HTML5 Guide.pdf',
-    size: '2.1 MB',
-    date: '23/5/26',
-    time: '10:00 AM',
-    image: 'https://picsum.photos/200/308',
-    sizeBytes: 2.1,
-  },
-  {
-    id: '7',
-    name: 'Web Accessibility.pdf',
-    size: '3.5 MB',
-    date: '22/5/26',
-    time: '1:30 PM',
-    image: 'https://picsum.photos/200/306',
-    sizeBytes: 3.5,
-  }
-]
+import {
+  hasFilePermission,
+  requestFilePermission,
+} from '@/services/permissionService'
+
 
 const getSortedPdfs = (data: any[], sortBy: string, sortDir: string) => {
   return [...data].sort((a, b) => {
@@ -115,6 +57,10 @@ const Index = () => {
   const [sortDir, setSortDir] = useState('asc')
   const [menuPos, setMenuPos] = useState({ top: 0, right: 0 })
   const [selectedPdf, setSelectedPdf] = useState(null)
+  const [pdfs, setPdfs] = useState<any[]>([])
+  const [hasPermission, setHasPermission] =
+  useState(false)
+
   const bottomSheetRef = useRef<any>(null)
   const {
     showCategories,
@@ -147,19 +93,51 @@ const Index = () => {
   const sortedPdfs = getSortedPdfs(pdfs, sortBy, sortDir)
 
   useEffect(() => {
-
-    const loadSettings = async () => {
+    const initialize = async () => {
       try {
         const savedLayout = await AsyncStorage.getItem('layout')
         const savedSortBy = await AsyncStorage.getItem('sortBy')
         const savedSortDir = await AsyncStorage.getItem('sortDir')
-
+  
         if (savedLayout) setLayout(savedLayout)
         if (savedSortBy) setSortBy(savedSortBy)
         if (savedSortDir) setSortDir(savedSortDir)
-      } catch (e) {}
+  
+        const storedPdfs = await loadPdfs()
+          setPdfs(storedPdfs)
+        const granted =
+          await hasFilePermission()
+
+          setHasPermission(granted)
+
+      } catch (e) {
+        console.log(e)
+      }
     }
-    loadSettings()
+  
+    initialize()
+  }, [])
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async state => {
+        if (state === 'active') {
+          const granted =
+            await hasFilePermission()
+  
+          setHasPermission(granted)
+  
+          if (granted) {
+            const storedPdfs =
+              await loadPdfs()
+  
+            setPdfs(storedPdfs)
+          }
+        }
+      }
+    )
+  
+    return () => subscription.remove()
   }, [])
 
   useEffect(() => { AsyncStorage.setItem('layout', layout) }, [layout])
@@ -184,7 +162,11 @@ const Index = () => {
       <FlatList
         key={numColumns}
         numColumns={numColumns}
-        data={getPaddedPdfs(sortedPdfs, numColumns)}
+        data={
+          hasPermission
+            ? getPaddedPdfs(sortedPdfs, numColumns)
+            : []
+        }
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PdfCard
@@ -195,12 +177,35 @@ const Index = () => {
           />
         )}
 
+        ListEmptyComponent={
+          !hasPermission ? (
+            <PermissionCard
+              onGrant={requestFilePermission}
+            />
+          ) : (
+            <View
+              style={{
+                padding: 40,
+                alignItems: 'center',
+              }}
+            >
+              <Text>No PDFs found.</Text>
+            </View>
+          )
+        }
+
         ListHeaderComponent={
           <>
             <View style={{ marginTop: 40 }}>
               <Topbar />
               {showHero && <Hero />}
-              {showCategories && <Categories />}
+              {showCategories && (
+              <Categories
+                onPdfAdded={(newPdfs: any[]) => {
+                  setPdfs(newPdfs)
+                }}
+              />
+            )}
               <FilterBar
                 layout={layout}
                 setLayout={setLayout}
@@ -217,7 +222,7 @@ const Index = () => {
         }
 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 120 }}
+        contentContainerStyle={{ paddingBottom: 70 }}
       />
 
       {showMenu && (
@@ -315,6 +320,7 @@ const Index = () => {
           </View>
         </>
       )}
+      
       <More
         ref={bottomSheetRef}
         pdf={selectedPdf}

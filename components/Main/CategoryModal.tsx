@@ -1,5 +1,6 @@
 import { Modal, View, Text, Pressable, FlatList, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { pickPdf } from '@/services/pdfService'
 
 const dummyPdfs = [
   { id: '1', name: 'HTML5 Guide.pdf' },
@@ -46,7 +47,16 @@ export default function CategoryModal({
   onClose,
   category,
   onColorChange,
+  onPdfAdded,
 }: any) {
+
+  const handleAddFiles = async () => {
+    const pdfs = await pickPdf()
+  
+    if (pdfs.length > 0) {
+      onPdfAdded?.(pdfs)
+    }
+  }
   return (
     <Modal
       visible={visible}
@@ -227,6 +237,7 @@ export default function CategoryModal({
                 </ScrollView>
 
                 <Pressable
+                  onPress={handleAddFiles}
                     style={{
                     paddingVertical: 12,
                     paddingHorizontal: 4,
