@@ -121,4 +121,7 @@ export default function LoadingState() {
       </Text>
     </View>
   )
+  
 }
+
+
