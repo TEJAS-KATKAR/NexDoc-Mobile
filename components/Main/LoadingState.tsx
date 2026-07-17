@@ -12,6 +12,7 @@ const LOCATIONS = [
   'Shared Documents',
 ]
 
+
 export default function LoadingState() {
   const [locationIndex, setLocationIndex] =
     useState(0)

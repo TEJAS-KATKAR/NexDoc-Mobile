@@ -17,6 +17,7 @@ const changeTab = (tab: string, position: number) => {
   }).start()
 }
 
+
 const { theme } = useSettings()
 
 const colors =
