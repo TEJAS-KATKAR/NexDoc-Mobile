@@ -13,12 +13,10 @@ import { THEMES } from '@/contexts/SettingsContext'
 import { loadPdfs } from '@/services/pdfService'
 import PermissionCard from '@/components/Main/PermissionCard'
 
-
 import {
   hasFilePermission,
   requestFilePermission,
 } from '@/services/permissionService'
-
 
 const getSortedPdfs = (data: any[], sortBy: string, sortDir: string) => {
   return [...data].sort((a, b) => {
